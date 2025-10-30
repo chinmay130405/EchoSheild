@@ -10,6 +10,7 @@ import Home from './components/Home';
 import LiveTrends from './components/LiveTrends';
 import FactCheckDetails from './components/FactCheckDetails';
 import Alerts from './components/Alerts';
+import ClaimDetail from './components/ClaimDetail';
 import './index.css';
 
 // Protected Route Component
@@ -84,6 +85,11 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/claim/:id" element={
+        <ProtectedRoute>
+          <ClaimDetail />
+        </ProtectedRoute>
+      } />
       <Route
         path="/*"
         element={

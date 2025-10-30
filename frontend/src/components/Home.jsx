@@ -2,12 +2,14 @@
  * Home page - Dashboard overview
  */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockClaims, mockAlerts } from '../mockData';
 import { formatTimeAgo, getTrustScoreColor, getTrustScoreBg, getStatusBadgeColor } from '../utils';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { mockTimeSeriesData } from '../mockData';
 
 export const Home = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalClaims: 0,
     verified: 0,
@@ -28,6 +30,10 @@ export const Home = () => {
       avgTrustScore: avgTrust
     });
   }, []);
+
+  const handleClaimClick = (claimId) => {
+    navigate(`/claim/${claimId}`);
+  };
 
   return (
     <div className="space-y-6 pb-8">
@@ -105,9 +111,13 @@ export const Home = () => {
         <h3 className="text-lg font-bold mb-4">🔔 Recent Claims</h3>
         <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
           {mockClaims.slice(0, 5).map((claim) => (
-            <div key={claim.id} className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-indigo-600 transition-all cursor-pointer">
+            <div 
+              key={claim.id} 
+              onClick={() => handleClaimClick(claim.id)}
+              className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-indigo-600 hover:bg-gray-750 transition-all cursor-pointer group"
+            >
               <div className="flex items-start justify-between mb-2">
-                <p className="font-semibold text-sm flex-1">{claim.claim}</p>
+                <p className="font-semibold text-sm flex-1 group-hover:text-indigo-400 transition">{claim.claim}</p>
                 <span className={`badge ${getStatusBadgeColor(claim.status)} ml-2 flex-shrink-0`}>
                   {claim.status.replace('_', ' ')}
                 </span>

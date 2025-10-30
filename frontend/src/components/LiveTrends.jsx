@@ -2,16 +2,22 @@
  * Live Trends page - Display trending claims and topics
  */
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockTrendingClaims, mockClaims } from '../mockData';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export const LiveTrends = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   
   const filteredClaims = mockClaims.filter(claim => 
     claim.claim.toLowerCase().includes(searchQuery.toLowerCase()) ||
     claim.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleClaimClick = (claimId) => {
+    navigate(`/claim/${claimId}`);
+  };
 
   return (
     <div className="space-y-6 pb-8">
@@ -73,9 +79,13 @@ export const LiveTrends = () => {
           <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
             {filteredClaims.length > 0 ? (
               filteredClaims.map((claim) => (
-                <div key={claim.id} className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <div 
+                  key={claim.id} 
+                  onClick={() => handleClaimClick(claim.id)}
+                  className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-indigo-600 hover:bg-gray-750 transition-all cursor-pointer group"
+                >
                   <div className="flex items-start justify-between mb-2">
-                    <p className="font-semibold flex-1">{claim.claim}</p>
+                    <p className="font-semibold flex-1 group-hover:text-indigo-400 transition">{claim.claim}</p>
                     <span className={`badge ${
                       claim.status === 'TRUE' ? 'badge-success' :
                       claim.status === 'MISINFORMATION' ? 'badge-danger' :
@@ -104,9 +114,13 @@ export const LiveTrends = () => {
         <h3 className="text-lg font-bold mb-4">🔥 All Trending Claims</h3>
         <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-hide">
           {mockClaims.map((claim) => (
-            <div key={claim.id} className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-indigo-600 transition-all cursor-pointer">
+            <div 
+              key={claim.id} 
+              onClick={() => handleClaimClick(claim.id)}
+              className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-indigo-600 hover:bg-gray-750 transition-all cursor-pointer group"
+            >
               <div className="flex items-start justify-between mb-2">
-                <p className="font-semibold text-sm flex-1">{claim.claim}</p>
+                <p className="font-semibold text-sm flex-1 group-hover:text-indigo-400 transition">{claim.claim}</p>
                 <span className={`badge ${
                   claim.status === 'TRUE' ? 'badge-success' :
                   claim.status === 'MISINFORMATION' ? 'badge-danger' :
